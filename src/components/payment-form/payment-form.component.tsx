@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { StripeCardElement } from "@stripe/stripe-js";
@@ -23,7 +23,7 @@ const PaymentForm = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-  const paymentHandler = async (e: FormEvent<HTMLFormElement>) => {
+  const paymentHandler = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
@@ -63,7 +63,7 @@ const PaymentForm = () => {
         alert("Payment Successful!");
       }
     }
-  };
+  }, [stripe, elements, amount, CardElement, currentUser]);
 
   return (
     <PaymentFormContainer>

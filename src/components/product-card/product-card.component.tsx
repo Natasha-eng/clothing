@@ -13,7 +13,7 @@ import {
   Name,
   Price,
 } from './product-card.styles';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 
 
 type ProductCardProps = {
@@ -25,7 +25,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
 
-  const addProductToCart = () => dispatch(addItemToCart(cartItems, product));
+  const addProductToCart = useCallback(() => dispatch(addItemToCart(cartItems, product)), [cartItems, product]);
 
   return (
     <ProductCartContainer>

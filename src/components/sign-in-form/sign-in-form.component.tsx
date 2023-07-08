@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
@@ -20,15 +20,15 @@ const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  const resetFormFields = () => {
+  const resetFormFields = useCallback(() => {
     setFormFields(defaultFormFields);
-  };
+  }, [defaultFormFields]);
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = useCallback(async () => {
     dispatch(googleSignInStart());
-  };
+  }, [dispatch]);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
@@ -37,13 +37,13 @@ const SignInForm = () => {
     } catch (error) {
       console.log('user sign in failed', error);
     }
-  };
+  }, [email, password, dispatch]);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setFormFields({ ...formFields, [name]: value });
-  };
+  }, [formFields]);
 
   return (
     <SignInContainer>

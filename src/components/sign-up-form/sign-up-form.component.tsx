@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AuthError, AuthErrorCodes } from 'firebase/auth'
 
@@ -20,11 +20,11 @@ const SignUpForm = () => {
   const { displayName, email, password, confirmPassword } = formFields;
   const dispatch = useDispatch();
 
-  const resetFormFields = () => {
+  const resetFormFields = useCallback(() => {
     setFormFields(defaultFormFields);
-  };
+  }, [defaultFormFields]);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
@@ -42,13 +42,13 @@ const SignUpForm = () => {
         console.log("user creation encountered an error", error);
       }
     }
-  };
+  }, [password, confirmPassword, email, password, displayName, AuthErrorCodes]);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setFormFields({ ...formFields, [name]: value });
-  };
+  }, [formFields]);
 
   return (
     <SignUpContainer>
